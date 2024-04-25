@@ -2,21 +2,27 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasUuids;
+    use HasRoles;
+
+    protected $primaryKey = 'uuid';
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +31,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
     ];
@@ -50,12 +57,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    protected $appends = ['level'];
+
+    public function getLevelAttribute()
+    {
+        return $this->roles()->first();
+    }
+
+    public function pegawai()
+    {
+        return $this->hasOne(Pegawai::class);
+    }
+
+    public function skp()
+    {
+        return $this->hasMany(Skp::class);
+    }
 }

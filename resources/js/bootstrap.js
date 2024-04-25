@@ -5,9 +5,30 @@
  */
 
 import axios from 'axios';
+import toastr from 'toastr'
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+toastr.options = {
+    closeButton: true,
+    debug: false,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: "toast-bottom-right",
+    preventDuplicates: true,
+    onclick: null,
+    showDuration: "1000",
+    hideDuration: "1000",
+    timeOut: "3000",
+    extendedTimeOut: "1000",
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut",
+};
+
+window.toastr = toastr;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

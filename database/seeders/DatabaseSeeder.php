@@ -9,9 +9,17 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
+        $this->call([
+            SettingSeeder::class,
+            GolonganSeeder::class,
+            UserSeeder::class,
+            PermissionSeeder::class,
+        ]);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
